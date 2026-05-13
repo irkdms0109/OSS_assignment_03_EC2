@@ -9,6 +9,12 @@ st.set_page_config(
 
 st.title("💻 EC2 Streamlit 배포 실습 앱")
 
+def log_input_change():
+    print(
+        f"[LOG] 입력값 변경됨 - 입력값: {st.session_state.user_input}, 시간: {datetime.now()}",
+        flush=True
+    )
+
 st.divider()
 
 st.subheader("📌 과제 정보")
