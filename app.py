@@ -9,36 +9,51 @@ st.set_page_config(
 
 st.title("💻 EC2 Streamlit 배포 실습 앱")
 
-def log_input_change():
-    print(
-        f"[LOG] 입력값 변경됨 - 입력값: {st.session_state.user_input}, 시간: {datetime.now()}",
-        flush=True
-    )
-
 st.divider()
 
 st.subheader("📌 과제 정보")
-st.write("과제: EC2 Streamlit 배포 실습")
+st.write("이 앱은 AWS EC2 환경에서 Streamlit 앱을 배포하는 실습용 앱입니다.")
+st.write("브라우저에서 앱을 조작하면 EC2 터미널에 로그가 출력됩니다.")
 
 st.divider()
 
-st.subheader("✏️ 간단한 입력 테스트")
+# 이전 입력값 저장용
+if "last_name" not in st.session_state:
+    st.session_state.last_name = ""
 
-name = st.text_input("이름을 입력하세요", placeholder="예: 이가은")
+if "click_count" not in st.session_state:
+    st.session_state.click_count = 0
 
-info = st.text_area(
-    "간단한 정보 작성하기",
-    placeholder="예: 인공지능융합대학 정보융합학부 학생"
-)
+st.subheader("📝 사용자 입력")
 
-if st.button("작성한 내용 확인하기"):
-    if name and info:
-        st.success("입력이 완료되었습니다!")
-        st.write(f"👤 이름: {name}")
-        st.write(f"🎯 정보 : {info}")
-        st.write(f"⏰ 작성 확인 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        st.info("Streamlit 앱이 정상적으로 실행되고 있습니다.")
-    else:
-        st.warning("이름과 정보를 모두 입력해주세요.")
+name = st.text_input("이름을 입력하세요")
 
-st.caption("OSS 과제용 EC2 Streamlit 배포 실습 앱")
+# 입력값이 바뀌었을 때 터미널 로그 출력
+if name != st.session_state.last_name:
+    print(
+        f"[LOG] 입력값 변경됨 | 입력값: {name} | 시간: {datetime.now()}",
+        flush=True
+    )
+    st.session_state.last_name = name
+
+st.write(f"현재 입력값: {name}")
+
+st.divider()
+
+st.subheader("✅ 동작 확인")
+
+if st.button("확인 버튼 클릭"):
+    st.session_state.click_count += 1
+
+    st.success(f"{name}님, Streamlit 앱이 EC2에서 정상 실행 중입니다!")
+
+    print(
+        f"[LOG] 버튼 클릭됨 | 입력값: {name} | 클릭 횟수: {st.session_state.click_count} | 시간: {datetime.now()}",
+        flush=True
+    )
+
+st.write(f"버튼 클릭 횟수: {st.session_state.click_count}")
+
+st.divider()
+
+st.caption("OSS 실습 3 - EC2 Streamlit 배포 과제")
